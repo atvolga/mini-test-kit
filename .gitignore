@@ -17,6 +17,19 @@
 *.zip
 *.tar.gz
 *.rar
+*.ejb # =)
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# IDEA
+*.iml
+.idea/
+
+# build tools
+.gradle/
+target/
+build/
+
+# Spring boot
+out/
