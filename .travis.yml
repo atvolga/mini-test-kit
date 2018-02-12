@@ -21,4 +21,4 @@ addons:
       - fix/*
       - feature/*
 script:
-  - sonar-scaner
+  - sonar-scanner
