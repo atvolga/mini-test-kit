@@ -6,19 +6,9 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    - $HOME/.sonar/cache/
 jdk:
   - oraclejdk8
-addons:
-  sonarcloud:
-    organization: $SONAR_ORGANIZATION
-    token:
-      secure: $SONAR_LOGIN
-    branches:
-      - master
-      - develop
-      - task/*
-      - fix/*
-      - feature/*
+install:
+  - ./gradlew clean
 script:
-  - sonar-scanner
+  - ./gradlew build sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.login=$SONAR_LOGIN
