@@ -15,4 +15,4 @@ addons:
     token:
       secure: 1db50ccbe4ee4b33840e1e0b89e8739089ffae4c
 script:
-  - gradlew sonarqube
+  - gradle sonarqube
