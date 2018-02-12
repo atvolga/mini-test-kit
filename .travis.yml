@@ -9,16 +9,5 @@ cache:
     - $HOME/.sonar/cache/
 jdk:
   - oraclejdk8
-addons:
-  sonarcloud:
-    organization: "atvolga-github"
-    token:
-      secure: 1db50ccbe4ee4b33840e1e0b89e8739089ffae4c
-    branches:
-      - master
-      - develop
-      - task/*
-      - fix/*
-      - feature/*
 script:
-  - sonar-scanner
+  - ./gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.login=$SONAR_LOGIN
