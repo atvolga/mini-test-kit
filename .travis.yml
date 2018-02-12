@@ -11,5 +11,5 @@ jdk:
 install:
   - ./gradlew clean
 script:
-  - $TRAVIS_BRANCH != "master" && ./gradlew build
-  - $TRAVIS_BRANCH == "master" && ./gradlew build sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.login=$SONAR_LOGIN
+  - if [ "$TRAVIS_BRANCH" != "master" ]; then ./gradlew build; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then ./gradlew build sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.login=$SONAR_LOGIN; fi
