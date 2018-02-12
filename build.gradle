@@ -1,0 +1,75 @@
+allprojects {
+    group 'com.atvolga.mtk'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE')
+        classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1')
+    }
+}
+
+task publish(group: 'Docker') {
+    subprojects.each {
+        dependsOn("${it.name}:publishDocker")
+    }
+    doLast {
+        println("All Docker images were published!")
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'docker'
+    apply plugin: 'org.sonarqube'
+
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoReport")
+        }
+    }
+
+    task publishDocker(type: Docker, dependsOn: build) {
+        push = true
+        tag = "atvolga/${project.name}"
+        dockerfile = file("${stageDir}/Dockerfile")
+        registry = "${dockerRegistry}"
+
+        doFirst {
+            copy {
+                from jar
+                into stageDir
+                from 'src/main/docker/'
+                into stageDir
+            }
+            ant.replace(file: dockerfile, token: '@version@', value: version)
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Edgware.SR2'
+        }
+    }
+}
