@@ -14,7 +14,11 @@ addons:
     organization: "atvolga-github"
     token:
       secure: 1db50ccbe4ee4b33840e1e0b89e8739089ffae4c
+    branches:
+      - master
+      - develop
+      - task/*
+      - fix/*
+      - feature/*
 script:
-  - ./gradlew clean
-  - ./gradlew build
-  - ./gradlew sonarqube
+  - sonar-scanner
