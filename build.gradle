@@ -10,6 +10,7 @@ buildscript {
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE')
         classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
         classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1')
     }
 }
 
@@ -30,6 +31,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'docker'
+    apply plugin: 'org.sonarqube'
 
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'

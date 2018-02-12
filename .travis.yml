@@ -1,0 +1,18 @@
+language: java
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache/
+jdk:
+  - oraclejdk8
+addons:
+  sonarcloud:
+    organization: "atvolga-github"
+    token:
+      secure: 1db50ccbe4ee4b33840e1e0b89e8739089ffae4c
+script:
+  - sonar-scanner
