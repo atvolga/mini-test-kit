@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: mtk_eureka_service
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:38888
