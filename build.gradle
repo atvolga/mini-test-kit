@@ -32,6 +32,7 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'docker'
     apply plugin: 'org.sonarqube'
+    apply plugin: 'checkstyle'
 
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
@@ -41,6 +42,29 @@ subprojects {
 
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
+
+    configurations {
+        checkstyleConfig {
+            transitive = false
+        }
+    }
+
+    def checkstyleVersion = '8.8'
+    checkstyle {
+        ignoreFailures = false
+        toolVersion = checkstyleVersion
+        config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+    }
+    tasks.withType(Checkstyle).each { checkstyleTask ->
+        checkstyleTask.doLast {
+            reports.all { report ->
+                def outputFile = report.destination
+                if (outputFile.exists() && outputFile.text.contains("<error ")) {
+                    throw new GradleException("There were checkstyle warnings! For more info check $outputFile")
+                }
+            }
+        }
+    }
 
     jacocoTestReport {
         reports {
@@ -71,5 +95,9 @@ subprojects {
         imports {
             mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Edgware.SR2'
         }
+    }
+
+    dependencies {
+        checkstyleConfig "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
     }
 }
